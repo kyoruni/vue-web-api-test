@@ -1,5 +1,6 @@
 import { ref, computed, isShallow } from 'vue';
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export interface City {
   name: string;
@@ -56,8 +57,8 @@ export const useWeatherStore = defineStore('weather', () => {
     // API URL
     const apiUrl = `${url}?${queryParams}`;
     // API叩いて、jsonとして取得
-    const response = await fetch(apiUrl);
-    const json = await response.json();
+    const response = await axios.get(apiUrl);
+    const json = response.data;
     // jsonの内容をstateに格納
     const weatherArray = json.weather;
     const weather = weatherArray[0];
