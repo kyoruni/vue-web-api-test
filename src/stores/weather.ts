@@ -51,7 +51,7 @@ export const useWeatherStore = defineStore('weather', () => {
     } = {
       lang: 'ja',
       q: selectedCity.value.q,
-      appId: 'xxxxxxxxxxxxxxxxxxxxx' // ここにAPIキーを記載
+      appId: import.meta.env.VITE_API_KEY
     };
     const queryParams = new URLSearchParams(params);
     // API URL
