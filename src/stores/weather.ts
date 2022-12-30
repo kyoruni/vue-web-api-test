@@ -40,7 +40,30 @@ export const useWeatherStore = defineStore('weather', () => {
 
   async function recieveWeatherInfo(id: string) {
     selectedCity.value = cityList.value.get(id) as City;
-    // ここでWebアクセス
+    // 基本のURL
+    const url = 'https://api.openweathermap.org/data/2.5/weather';
+    // クエリパラメータ作成
+    const params: {
+      lang: string,
+      q: string,
+      appId: string
+    } = {
+      lang: 'ja',
+      q: selectedCity.value.q,
+      appId: 'xxxxxxxxxxxxxxxxxxxxx' // ここにAPIキーを記載
+    };
+    const queryParams = new URLSearchParams(params);
+    // API URL
+    const apiUrl = `${url}?${queryParams}`;
+    // API叩いて、jsonとして取得
+    const response = await fetch(apiUrl);
+    const json = await response.json();
+    // jsonの内容をstateに格納
+    const weatherArray = json.weather;
+    const weather = weatherArray[0];
+    weatherDescription.value = weather.description;
+    // 取得中の表示をやめる
+    isLoading.value = false;
   }
 
   return { cityList, selectedCity, isLoading, weatherDescription, prepareCityList, recieveWeatherInfo }
